@@ -25,6 +25,13 @@ services:
       - discovery.type=single-node
     image: ${IMAGE_REPO}:zammad-elasticsearch${VERSION}
     restart: ${RESTART}
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+      nofile:
+        soft: 65536
+        hard: 65536
     volumes:
       - elasticsearch-data:/usr/share/elasticsearch/data
 
@@ -115,9 +122,25 @@ services:
 volumes:
   elasticsearch-data:
     driver: local
+    driver_opts:
+      type: none
+      device: /data/zammad/elasticsearch-data
+      o: bind
   postgresql-data:
     driver: local
+    driver_opts:
+      type: none
+      device: /data/zammad/postgresql-data
+      o: bind
   zammad-backup:
     driver: local
+    driver_opts:
+      type: none
+      device: /data/zammad/zammad-backup
+      o: bind
   zammad-data:
     driver: local
+    driver_opts:
+      type: none
+      device: /data/zammad/zammad-data
+      o: bind
